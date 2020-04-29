@@ -9,20 +9,24 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.windowing.TupleWindow;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class WindowBolt extends BaseWindowedBolt {
     private OutputCollector collector;
     Map<String, Integer> maxi;
     int maxValue;
+    Date date;
+    long time;
+    Timestamp ts;
 
     public void prepare(Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
         maxi = new HashMap<String, Integer>();
         maxValue=0;
+        date= new Date();
+        time= date.getTime();
+        ts= new Timestamp(time);
     }
 
 
@@ -52,12 +56,14 @@ public class WindowBolt extends BaseWindowedBolt {
 
             }
             Iterator it = maxi.keySet().iterator();       //keyset is a method
-            while(it.hasNext())
+            int counter=0;
+            while(it.hasNext() && counter<=10)
             {
                 String key=it.next().toString();
                 String value = maxi.get(key).toString();
                 System.out.println("Maximum appearead word: "+key+"     & number: "+value);
-                collector.emit(new Values(key, value));
+                collector.emit(new Values(ts.toString(),key, value));
+                counter++;
             }
 
         }
@@ -65,7 +71,7 @@ public class WindowBolt extends BaseWindowedBolt {
 
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("key", "value"));
+        declarer.declare(new Fields("timestamp","key", "value"));
     }
 }
 

@@ -30,9 +30,9 @@ public class KafkaStorm {
         builder.setBolt("max-counter",new WindowBolt().withTumblingWindow(BaseWindowedBolt.Duration.of(6000))).globalGrouping("word-counter");;
         builder.setBolt("WORD_COUNT_CASSANDRA_BOLT", new CassandraWriterBolt(
                 async(
-                        simpleQuery("INSERT INTO output.maxxer  (key,value ) VALUES (?,?);")
+                        simpleQuery("INSERT INTO output.stormkf  (timestamp,key,value ) VALUES (?,?,?);")
                                 .with(
-                                        fields("key","value")
+                                        fields("timestamp","key","value")
                                 )
                 )
         ),1).globalGrouping("max-counter");//globalGrouping("call-log-counter-bolt");
