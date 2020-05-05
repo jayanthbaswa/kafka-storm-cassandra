@@ -22,7 +22,7 @@ public class CountBolt implements IRichBolt {
     }
 
     public void execute(Tuple input) {
-        String str = input.getString(4).toString();
+        String str = input.getStringByField("words");
 
         Integer c=0;
         if(!counters.containsKey(str)){

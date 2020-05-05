@@ -43,7 +43,7 @@ public class WindowBolt extends BaseWindowedBolt {
                 String str = tuple.getStringByField("key").toString();
 
                 int val = Integer.parseInt(tuple.getStringByField("value"));
-                System.out.println("Outterxxxxxxxxxxxxxxxxx: "+str +"-----"+val+"<><>"+maxValue+"--Counters: "+maxi.size());
+                //System.out.println("Outterxxxxxxxxxxxxxxxxx: "+str +"-----"+val+"<><>"+maxValue+"--Counters: "+maxi.size());
                 if(maxValue<val){
                     maxValue=val;
                     maxi.clear();
@@ -61,7 +61,7 @@ public class WindowBolt extends BaseWindowedBolt {
             {
                 String key=it.next().toString();
                 String value = maxi.get(key).toString();
-                System.out.println("Maximum appearead word: "+key+"     & number: "+value);
+                //System.out.println("Maximum appearead word: "+key+"     & number: "+value);
                 collector.emit(new Values(ts.toString(),key, value));
                 counter++;
             }
